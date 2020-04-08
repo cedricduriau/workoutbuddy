@@ -1,0 +1,9 @@
+# files
+*.pyc
+
+# directories
+.vscode/
+__pycache__/
+build/
+dist/
+*.egg-info/
