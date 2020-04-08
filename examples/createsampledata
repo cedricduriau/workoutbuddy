@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+# ensure database exists and is empty
+workoutbuddy-cli set-up
+workoutbuddy-cli tear-down
+
+# create exercises
+workoutbuddy-cli create-exercise -n "handstand push up"
+workoutbuddy-cli create-exercise -n "pump"
+workoutbuddy-cli create-exercise -n "superman hold"
+workoutbuddy-cli create-exercise -n "hollow hold"
+workoutbuddy-cli create-exercise -n "pistol squat"
+workoutbuddy-cli create-exercise -n "sit up"
+workoutbuddy-cli create-exercise -n "pull up"
+echo "exercises"
+workoutbuddy-cli list-exercises
+
+# create exercise sets
+workoutbuddy-cli create-exercise-set -e 1 -r 10
+workoutbuddy-cli create-exercise-set -e 2 -r 10
+workoutbuddy-cli create-exercise-set -e 3 -r 10
+workoutbuddy-cli create-exercise-set -e 4 -r 10
+workoutbuddy-cli create-exercise-set -e 5 -r 10
+workoutbuddy-cli create-exercise-set -e 6 -r 10
+workoutbuddy-cli create-exercise-set -e 7 -r 10
+echo "exercise sets"
+workoutbuddy-cli list-exercise-sets
+
+# log exercise sets
+workoutbuddy-cli log-exercise-set -d today -e 1
+workoutbuddy-cli log-exercise-set -d today -e 2
+workoutbuddy-cli log-exercise-set -d today -e 3
+workoutbuddy-cli log-exercise-set -d today -e 4
+workoutbuddy-cli log-exercise-set -d today -e 5
+workoutbuddy-cli log-exercise-set -d today -e 6
+workoutbuddy-cli log-exercise-set -d today -e 7
+echo "logs"
+workoutbuddy-cli list-logs
