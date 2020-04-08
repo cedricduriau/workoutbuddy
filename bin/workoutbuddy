@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+# stdlib modules
+from argparse import ArgumentParser
+
+# tool modules
+from workoutbuddy import workoutbuddy
+
+
+def _build_parser():
+    parser = ArgumentParser()
+    subparsers = parser.add_subparsers()
+
+    # general
+    help = "set up the database"
+    parser_set_up = subparsers.add_parser("set-up", help=help)
+    parser_set_up.set_defaults(func=workoutbuddy.set_up)
+
+    help = "delete all database records"
+    parser_tear_down = subparsers.add_parser("tear-down", help=help)
+    parser_tear_down.set_defaults(func=workoutbuddy.tear_down)
+
+    # list
+    help = "list exercises"
+    parser_list_exercises = subparsers.add_parser("list-exercises", help=help)
+    parser_list_exercises.set_defaults(func=workoutbuddy.list_exercises)
+
+    help = "list exercise sets"
+    parser_list_exercise_sets = subparsers.add_parser("list-exercise-sets", help=help)
+    parser_list_exercise_sets.set_defaults(func=workoutbuddy.list_exercise_sets)
+
+    help = "list logs"
+    parser_list_logs = subparsers.add_parser("list-logs", help=help)
+    parser_list_logs.set_defaults(func=workoutbuddy.list_logs)
+
+    # create
+    help = "create an exercise"
+    parser_create_exercise = subparsers.add_parser("create-exercise", help=help)
+    help = "name of the exercise"
+    parser_create_exercise.add_argument("-n", "--name", required=True, help=help)
+    parser_create_exercise.set_defaults(func=workoutbuddy.create_exercise)
+
+    help = "create an exercise set"
+    parser_create_exerciseset = subparsers.add_parser("create-exercise-set", help=help)
+    help = "id of the exercise"
+    parser_create_exerciseset.add_argument("-e", "--exerciseid", required=True, help=help)
+    help = "number of repetitions"
+    parser_create_exerciseset.add_argument("-r", "--reps", required=True, help=help)
+    parser_create_exerciseset.set_defaults(func=workoutbuddy.create_exercise_set)
+
+    # log
+    help = "logs an exercise set"
+    parser_log_exercise_set = subparsers.add_parser("log-exercise-set", help=help)
+    help = "date of the log"
+    parser_log_exercise_set.add_argument("-d", "--date", required=True, help=help)
+    help = "id of the exercise set"
+    parser_log_exercise_set.add_argument("-e", "--exercisesetid", required=True, help=help)
+    parser_log_exercise_set.set_defaults(func=workoutbuddy.log_exercise_set)
+
+    return parser
+
+
+if __name__ == "__main__":
+    parser = _build_parser()
+    args = parser.parse_args()
+
+    kwargs = vars(args)
+    func = kwargs["func"]
+    kwargs.pop("func")
+
+    func(**kwargs)
