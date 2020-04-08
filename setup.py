@@ -23,7 +23,7 @@ setup(name="workoutbuddy",
       url="https://github.com/cedricduriau/workoutbuddy",
       packages=find_packages(where="python"),
       package_dir={"": "python"},
-      scripts=["bin/workoutbuddy"],
+      scripts=["bin/workoutbuddy-cli"],
       install_requires=requirements_install,
       extras_require={"dev": requirements_dev},
       data_files=[(os.path.expanduser("~/.workoutbuddy"), [])])
