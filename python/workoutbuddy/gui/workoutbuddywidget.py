@@ -125,7 +125,10 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
         ax = self.canvas.figure.add_subplot(111)
         for name in names:
-            df = by_name.get_group(name)
+            try:
+                df = by_name.get_group(name)
+            except KeyError:
+                continue
             df.plot(x="date", ax=ax, alpha=.5)
 
         # force axis limit
