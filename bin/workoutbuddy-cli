@@ -51,7 +51,7 @@ def _build_parser():
     # log
     help = "logs an exercise set"
     parser_log_exercise_set = subparsers.add_parser("log-exercise-set", help=help)
-    help = "date of the log"
+    help = "date of the log (dd/MM/YYYY or 'today')"
     parser_log_exercise_set.add_argument("-d", "--date", required=True, help=help)
     help = "id of the exercise set"
     parser_log_exercise_set.add_argument("-e", "--exercisesetid", required=True, help=help)
