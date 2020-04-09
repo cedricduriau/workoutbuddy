@@ -8,6 +8,7 @@ from workoutbuddy import workoutbuddy
 from workoutbuddy.models import Log
 from workoutbuddy.models import ExerciseSet
 from workoutbuddy.models import Exercise
+from workoutbuddy.gui.checkablestringlistmodel import CheckableStringListModel
 
 # third party modules
 from PySide2 import QtWidgets, QtCore
@@ -25,8 +26,8 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         super(WorkoutBuddyWidget, self).__init__(*args, **kwargs)
         self._dataframe = None
         self._build_ui()
-        self._connect_signals()
         self._initialize()
+        self._connect_signals()
         self.refresh()
 
     # =========================================================================
@@ -73,6 +74,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
     def _connect_signals(self):
         self.date_start.dateChanged.connect(self._date_start_changed)
         self.date_end.dateChanged.connect(self._date_end_changed)
+        self.list_exercises.model().item_checked.connect(self._list_exercises_item_checked)
         self.dataframe_changed.connect(self._plot_data)
 
     def _initialize(self):
@@ -83,10 +85,18 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         date_start = date_end - datetime.timedelta(days=days + 1)
         self.date_start.setDate(date_start)
 
-    def _date_start_changed(self, _date):
+        session = workoutbuddy.create_session()
+        result = session.query(Exercise.name).all()
+        exercices = [i[0] for i in result]
+        self.list_exercises.setModel(CheckableStringListModel(exercices))
+
+    def _date_start_changed(self, *args, **kwargs):
         self.refresh()
 
-    def _date_end_changed(self, _date):
+    def _date_end_changed(self, *args, **kwargs):
+        self.refresh()
+
+    def _list_exercises_item_checked(self, *args, **kwargs):
         self.refresh()
 
     def _get_dataframe(self):
@@ -95,26 +105,30 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         query = query.join(ExerciseSet, ExerciseSet.id == Log.exercise_set_id)
         query = query.join(Exercise, Exercise.id == ExerciseSet.id)
         df = pd.read_sql(query.statement, session.bind)
-
-        date_start = self.date_start.date().toPython()
-        date_end = self.date_end.date().toPython()
-        df = df[df["date"] < date_end]
-        df = df[df["date"] > date_start]
-
         return df
 
     def _plot_data(self):
+        # clear canvas
         self.canvas.figure.clear()
+
+        # filter date
         date_start = self.date_start.date().toPython()
         date_end = self.date_end.date().toPython()
 
-        by_name = self.dataframe.groupby("name")
+        dataframe = self.dataframe.copy()
+        dataframe = dataframe[dataframe["date"] < date_end]
+        dataframe = dataframe[dataframe["date"] > date_start]
+
+        # filter names
+        by_name = dataframe.groupby("name")
+        names = self.list_exercises.model().get_checked_items()
+
         ax = self.canvas.figure.add_subplot(111)
-
-        for name in by_name.groups:
+        for name in names:
             df = by_name.get_group(name)
-            df.plot(x="date", ax=ax, label=name, alpha=.75)
+            df.plot(x="date", ax=ax, alpha=.5)
 
+        # force axis limit
         ax.set_xlim(date_start, date_end)
         ax.legend(by_name.groups)
         self.canvas.draw()
