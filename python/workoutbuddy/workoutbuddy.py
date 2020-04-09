@@ -121,6 +121,8 @@ def create_exercise_set(exerciseid, reps):
 def log_exercise_set(date, exercisesetid):
     if date == "today":
         date = datetime.date.today()
+    else:
+        date = datetime.datetime.strptime(date, "%d/%m/%Y")
 
     session = create_session()
     eset = session.query(ExerciseSet).filter(ExerciseSet.id == exercisesetid).first()
