@@ -27,12 +27,26 @@ echo "exercise sets"
 workoutbuddy-cli list-exercise-sets
 
 # log exercise sets
-workoutbuddy-cli log-exercise-set -d today -e 1
-workoutbuddy-cli log-exercise-set -d today -e 2
-workoutbuddy-cli log-exercise-set -d today -e 3
-workoutbuddy-cli log-exercise-set -d today -e 4
-workoutbuddy-cli log-exercise-set -d today -e 5
-workoutbuddy-cli log-exercise-set -d today -e 6
-workoutbuddy-cli log-exercise-set -d today -e 7
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 1
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 2
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 3
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 4
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 5
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 6
+workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 7
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 1
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 2
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 3
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 4
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 5
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 6
+workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 7
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 1
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 2
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 3
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 4
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 5
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 6
+workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 7
 echo "logs"
 workoutbuddy-cli list-logs
