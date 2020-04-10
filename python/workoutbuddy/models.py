@@ -14,19 +14,7 @@ class Exercise(Base):
     name = Column(String(64), unique=True, nullable=False)
 
     # relationships
-    sets = relationship("ExerciseSet", back_populates="exercise")
-
-
-class ExerciseSet(Base):
-    __tablename__ = "exercisesets"
-
-    id = Column(Integer, primary_key=True)
-    reps = Column(Integer, unique=False, nullable=False)
-
-    # relationships
-    exercise_id = Column(Integer, ForeignKey("exercises.id"))
-    exercise = relationship("Exercise", back_populates="sets")
-    logs = relationship("Log", back_populates="exercise_set")
+    logs = relationship("Log", back_populates="exercise")
 
 
 class Log(Base):
@@ -34,7 +22,8 @@ class Log(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(Date, unique=False, nullable=False)
+    reps = Column(Integer, unique=False, nullable=False)
 
     # relationships
-    exercise_set_id = Column(Integer, ForeignKey("exercisesets.id"))
-    exercise_set = relationship("ExerciseSet", back_populates="logs")
+    exercise_id = Column(Integer, ForeignKey("exercises.id"))
+    exercise = relationship("Exercise", back_populates="logs")

@@ -25,10 +25,6 @@ def _build_parser():
     parser_list_exercises = subparsers.add_parser("list-exercises", help=help)
     parser_list_exercises.set_defaults(func=workoutbuddy.list_exercises)
 
-    help = "list exercise sets"
-    parser_list_exercise_sets = subparsers.add_parser("list-exercise-sets", help=help)
-    parser_list_exercise_sets.set_defaults(func=workoutbuddy.list_exercise_sets)
-
     help = "list logs"
     parser_list_logs = subparsers.add_parser("list-logs", help=help)
     parser_list_logs.set_defaults(func=workoutbuddy.list_logs)
@@ -40,22 +36,16 @@ def _build_parser():
     parser_create_exercise.add_argument("-n", "--name", required=True, help=help)
     parser_create_exercise.set_defaults(func=workoutbuddy.create_exercise)
 
-    help = "create an exercise set"
-    parser_create_exerciseset = subparsers.add_parser("create-exercise-set", help=help)
-    help = "id of the exercise"
-    parser_create_exerciseset.add_argument("-e", "--exerciseid", required=True, help=help)
-    help = "number of repetitions"
-    parser_create_exerciseset.add_argument("-r", "--reps", required=True, help=help)
-    parser_create_exerciseset.set_defaults(func=workoutbuddy.create_exercise_set)
-
     # log
-    help = "logs an exercise set"
-    parser_log_exercise_set = subparsers.add_parser("log-exercise-set", help=help)
+    help = "logs an exercise"
+    parser_log_exercise = subparsers.add_parser("log-exercise", help=help)
     help = "date of the log (dd/MM/YYYY or 'today')"
-    parser_log_exercise_set.add_argument("-d", "--date", required=True, help=help)
-    help = "id of the exercise set"
-    parser_log_exercise_set.add_argument("-e", "--exercisesetid", required=True, help=help)
-    parser_log_exercise_set.set_defaults(func=workoutbuddy.log_exercise_set)
+    parser_log_exercise.add_argument("-d", "--date", required=True, help=help)
+    help = "id of the exercise"
+    parser_log_exercise.add_argument("-e", "--exerciseid", required=True, help=help)
+    help = "amount of repetition"
+    parser_log_exercise.add_argument("-r", "--reps", required=True, help=help)
+    parser_log_exercise.set_defaults(func=workoutbuddy.log_exercise)
 
     return parser
 

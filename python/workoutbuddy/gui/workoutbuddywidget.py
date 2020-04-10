@@ -6,7 +6,6 @@ import calendar
 from workoutbuddy import __version__
 from workoutbuddy import workoutbuddy
 from workoutbuddy.models import Log
-from workoutbuddy.models import ExerciseSet
 from workoutbuddy.models import Exercise
 from workoutbuddy.gui.checkablestringlistmodel import CheckableStringListModel
 
@@ -101,9 +100,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
     def _get_dataframe(self):
         session = workoutbuddy.create_session()
-        query = session.query(Log.date, Exercise.name, ExerciseSet.reps)
-        query = query.join(ExerciseSet, ExerciseSet.id == Log.exercise_set_id)
-        query = query.join(Exercise, Exercise.id == ExerciseSet.id)
+        query = session.query(Log.date, Log.reps, Exercise.name)
         df = pd.read_sql(query.statement, session.bind)
         return df
 

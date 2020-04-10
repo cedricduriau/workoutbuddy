@@ -5,7 +5,6 @@ import datetime
 # tool modules
 from workoutbuddy.models import Base
 from workoutbuddy.models import Exercise
-from workoutbuddy.models import ExerciseSet
 from workoutbuddy.models import Log
 
 # third party modules
@@ -75,10 +74,6 @@ def list_exercises():
     _list_records(Exercise)
 
 
-def list_exercise_sets():
-    _list_records(ExerciseSet)
-
-
 def list_logs():
     _list_records(Log)
 
@@ -97,40 +92,19 @@ def create_exercise(name):
     return exercise
 
 
-def create_exercise_set(exerciseid, reps):
-    session = create_session()
-
-    exercise = session.query(Exercise).filter(Exercise.id == exerciseid).first()
-    if not exercise:
-        print(f"no exercise found for id: {exercise.id}")
-        return
-
-    query = session.query(ExerciseSet).filter(ExerciseSet.exercise == exercise)
-    query = query.filter(ExerciseSet.reps == reps)
-    eset = query.first()
-    if eset:
-        print(f"exercise set already exists (id: {eset.id})")
-        return
-
-    eset = ExerciseSet(exercise=exercise, reps=reps)
-    session.add(eset)
-    session.commit()
-    return eset
-
-
-def log_exercise_set(date, exercisesetid):
+def log_exercise(date, exerciseid, reps):
     if date == "today":
         date = datetime.date.today()
     else:
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
 
     session = create_session()
-    eset = session.query(ExerciseSet).filter(ExerciseSet.id == exercisesetid).first()
-    if not eset:
-        print(f"no exercise set found for id: {exercisesetid.id}")
+    exercise = session.query(Exercise).filter(Exercise.id == exerciseid).first()
+    if not exercise:
+        print(f"no exercise found for id: {exercise.id}")
         return
 
-    log = Log(date=date, exercise_set=eset)
+    log = Log(date=date, exercise=exercise, reps=reps)
     session.add(log)
     session.commit()
     return log
