@@ -1,52 +1,75 @@
 #!/usr/bin/env sh
 
-# ensure database exists and is empty
+# set up
 workoutbuddy-cli set-up
 workoutbuddy-cli tear-down
 
-# create exercises
-workoutbuddy-cli create-exercise -n "handstand push up"
-workoutbuddy-cli create-exercise -n "pump"
-workoutbuddy-cli create-exercise -n "superman hold"
-workoutbuddy-cli create-exercise -n "hollow hold"
-workoutbuddy-cli create-exercise -n "pistol squat"
-workoutbuddy-cli create-exercise -n "sit up"
-workoutbuddy-cli create-exercise -n "pull up"
-echo "exercises"
+# exercises
+workoutbuddy-cli create-exercise -n "handstand push up" # 1
+workoutbuddy-cli create-exercise -n "pump"              # 2
+workoutbuddy-cli create-exercise -n "superman hold"     # 3
+workoutbuddy-cli create-exercise -n "hollow hold"       # 4
+workoutbuddy-cli create-exercise -n "pistol squat"      # 5
+workoutbuddy-cli create-exercise -n "sit up"            # 6
+workoutbuddy-cli create-exercise -n "pull up"           # 7
+
 workoutbuddy-cli list-exercises
 
-# create exercise sets
-workoutbuddy-cli create-exercise-set -e 1 -r 10
-workoutbuddy-cli create-exercise-set -e 2 -r 10
-workoutbuddy-cli create-exercise-set -e 3 -r 10
-workoutbuddy-cli create-exercise-set -e 4 -r 10
-workoutbuddy-cli create-exercise-set -e 5 -r 10
-workoutbuddy-cli create-exercise-set -e 6 -r 10
-workoutbuddy-cli create-exercise-set -e 7 -r 10
-echo "exercise sets"
-workoutbuddy-cli list-exercise-sets
+# logs
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 2 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 3 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 4 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 6 -r 10
+workoutbuddy-cli log-exercise -d 04/04/2020 -e 7 -r 10
 
-# log exercise sets
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 1
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 2
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 3
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 4
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 5
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 6
-workoutbuddy-cli log-exercise-set -d 01/01/2020 -e 7
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 1
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 2
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 3
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 4
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 5
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 6
-workoutbuddy-cli log-exercise-set -d 02/01/2020 -e 7
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 1
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 2
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 3
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 4
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 5
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 6
-workoutbuddy-cli log-exercise-set -d 03/01/2020 -e 7
-echo "logs"
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 2 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 3 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 4 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 6 -r 10
+workoutbuddy-cli log-exercise -d 05/04/2020 -e 7 -r 10
+
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 2 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 3 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 4 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 6 -r 10
+workoutbuddy-cli log-exercise -d 06/04/2020 -e 7 -r 10
+
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 2 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 3 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 4 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 6 -r 10
+workoutbuddy-cli log-exercise -d 07/04/2020 -e 7 -r 10
+
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 2 -r 10
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 3 -r 10
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 4 -r 10
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 6 -r 10 
+workoutbuddy-cli log-exercise -d 08/04/2020 -e 7 -r 10 
+
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 2 -r 20
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 3 -r 20
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 4 -r 20
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 6 -r 20
+workoutbuddy-cli log-exercise -d 09/04/2020 -e 7 -r 20
+
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 1 -r 10
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 2 -r 20
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 3 -r 20
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 4 -r 20
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 5 -r 10
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 6 -r 20
+workoutbuddy-cli log-exercise -d 10/04/2020 -e 7 -r 20
+
 workoutbuddy-cli list-logs
