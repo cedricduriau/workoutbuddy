@@ -31,6 +31,7 @@ workoutbuddy-cli list-exercises
 
 # log exercises
 workoutbuddy-cli log-exercise --date "today" --exerciseid 1 --reps 20
+workoutbuddy-cli log-exercise --date "01/01/2020" --exerciseid 1 --reps 20
 
 # list logs
 workoutbuddy-cli list-logs
