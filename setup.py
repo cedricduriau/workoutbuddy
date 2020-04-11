@@ -10,7 +10,10 @@ package_dir = os.path.join(os.path.dirname(f), "python")
 sys.path.insert(0, package_dir)
 from workoutbuddy import __version__  # noqa
 
-requirements_install = ["SQLAlchemy==1.3.*"]
+requirements_install = ["SQLAlchemy==1.3.*",
+                        "matplotlib==3.2.*",
+                        "pandas==1.0.*",
+                        "PySide2==5.14.*"]
 requirements_dev = ["flake8==3.7.*", "radon==4.1.*"]
 
 
