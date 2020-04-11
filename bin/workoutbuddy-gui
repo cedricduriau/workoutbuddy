@@ -19,5 +19,6 @@ if __name__ == "__main__":
     dialog.layout().addWidget(widget)
     dialog.layout().setContentsMargins(0, 0, 0, 0)
     dialog.setWindowFlags(widget.windowFlags())
+    dialog.setWindowTitle(widget.windowTitle())
 
     sys.exit(dialog.exec_())
