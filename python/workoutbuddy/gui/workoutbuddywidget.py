@@ -18,21 +18,24 @@ import pandas as pd
 
 
 class WorkoutBuddyWidget(QtWidgets.QWidget):
+    """WorkoutBuddy GUI plotting exercised logs."""
 
+    # signals
     dataframe_changed = QtCore.Signal(pd.DataFrame)
 
     def __init__(self, *args, **kwargs):
-        super(WorkoutBuddyWidget, self).__init__(*args, **kwargs)
+        """Initialize the object."""
         self._dataframe = None
+        super(WorkoutBuddyWidget, self).__init__(*args, **kwargs)
         self._build_ui()
         self._initialize()
         self._connect_signals()
-        self.refresh()
 
     # =========================================================================
     # private
     # =========================================================================
     def _build_ui(self):
+        """Build the user interface."""
         # date start
         self.date_start = QtWidgets.QDateEdit()
         self.date_start.setDisplayFormat("dd/MM/yyyy")
@@ -71,12 +74,14 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.setWindowFlags(QtCore.Qt.Window)
 
     def _connect_signals(self):
+        """Connect signals with slots."""
         self.date_start.dateChanged.connect(self._date_start_changed)
         self.date_end.dateChanged.connect(self._date_end_changed)
         self.list_exercises.model().item_checked.connect(self._list_exercises_item_checked)
-        self.dataframe_changed.connect(self._plot_data)
+        self.dataframe_changed.connect(self._plot)
 
     def _initialize(self):
+        """Initialize startup data."""
         today = datetime.date.today()
 
         date_start = datetime.date(today.year, today.month, 1)
@@ -91,22 +96,33 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         exercices = [i[0] for i in result]
         self.list_exercises.setModel(CheckableStringListModel(exercices))
 
+        self.dataframe = self._get_dataframe()
+
     def _date_start_changed(self, *args, **kwargs):
+        """Slot for date start changes."""
         self.refresh()
 
     def _date_end_changed(self, *args, **kwargs):
+        """Slot for date end changes."""
         self.refresh()
 
     def _list_exercises_item_checked(self, *args, **kwargs):
+        """Slot for exercise list item checkstate changes."""
         self.refresh()
 
     def _get_dataframe(self):
+        """
+        Return the dataframe with all log/exercise data.
+
+        :rtype: pd.DataFrame
+        """
         session = workoutbuddy.create_session()
         query = session.query(Log, Exercise).join(Exercise)
         df = pd.read_sql(query.statement, session.bind)
         return df
 
-    def _plot_data(self):
+    def _plot(self):
+        """Plot the exercise logs."""
         # clear canvas
         self.canvas.figure.clear()
 
@@ -118,16 +134,25 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         df = df[df["date"] < date_end]
         df = df[df["date"] > date_start]
 
-        # area plot
+        # build area dataframe
         ax = self.canvas.figure.add_subplot()
         names = self.list_exercises.model().get_checked_items()
-        if names:
-            pivot_df = df.pivot(index="date", columns="name", values="reps")
-            if not pivot_df.empty:
-                pivot_df.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
 
+        dataframe = pd.DataFrame()
+        if names:
+            dataframe = df.pivot(index="date", columns="name", values="reps")
+
+        # plot area
+        if not dataframe.empty:
+            dataframe.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
+
+        # set axis date range
         ax.set_xlim(date_start, date_end)
+
+        # auto-rotate x axis date ticks
         self.canvas.figure.autofmt_xdate()
+
+        # force re-draw
         self.canvas.draw()
 
     # =========================================================================
@@ -135,12 +160,29 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
     # =========================================================================
     @property
     def dataframe(self):
-        return self._dataframe
+        """
+        Return the current dataframe used to plot.
+
+        :rtype: pd.DataFrame
+        """
+        return self._dataframe.copy()
 
     @dataframe.setter
     def dataframe(self, value):
+        """
+        Set the dataframe to plot.
+
+        :param value: Dataframe to plot.
+        :type value: pd.DataFrame
+        """
         self._dataframe = value
         self.dataframe_changed.emit(value)
 
+    def clear(self):
+        """Clears the settings, dataframe and plot."""
+        self._initialize()
+        self.dataframe = pd.DataFrame()
+
     def refresh(self):
+        """Clears and re-plot the dataframe."""
         self.dataframe = self._get_dataframe()
