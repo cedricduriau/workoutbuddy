@@ -78,12 +78,14 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.dataframe_changed.connect(self._plot_data)
 
     def _initialize(self):
-        date_end = datetime.date.today()
-        self.date_end.setDate(date_end)
+        today = datetime.date.today()
 
-        days = calendar.monthrange(date_end.year, date_end.month)[1]
-        date_start = date_end - datetime.timedelta(days=days + 1)
+        date_start = datetime.date(today.year, today.month, 1)
         self.date_start.setDate(date_start)
+
+        days = calendar.monthrange(today.year, today.month)[1]
+        date_end = datetime.date(today.year, today.month, days)
+        self.date_end.setDate(date_end)
 
         session = workoutbuddy.create_session()
         result = session.query(Exercise.name).all()
@@ -126,7 +128,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
                 pivot_df.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
 
         ax.set_xlim(date_start, date_end)
-        ax.grid()
+        self.canvas.figure.autofmt_xdate()
         self.canvas.draw()
 
     # =========================================================================
