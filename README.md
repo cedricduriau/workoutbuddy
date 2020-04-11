@@ -16,32 +16,25 @@ If you wish to install the current master, use the following command:
 
 ## Usage
 
-#### Set up database
 ```
+# set up database
 workoutbuddy-cli set-up
-```
 
-#### Clear database
-```
+# clear database
 workoutbuddy-cli tear-down
-```
 
-#### Create Exercise
-```
+# create exercise
 workoutbuddy-cli create-exercise --name "pull up"
-```
 
-#### List Exercises
-```
+# list exercises
 workoutbuddy-cli list-exercises
-```
 
-#### Log Exercise
-```
+# log exercises
 workoutbuddy-cli log-exercise --date "today" --exerciseid 1 --reps 20
-```
 
-#### List Logs
-```
+# list logs
 workoutbuddy-cli list-logs
+
+# launch gui
+workoutbuddy-gui
 ```
