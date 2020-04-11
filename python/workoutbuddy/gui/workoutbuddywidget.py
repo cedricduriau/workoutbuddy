@@ -14,6 +14,7 @@ from PySide2 import QtWidgets, QtCore
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+import matplotlib.dates as mdates
 import pandas as pd
 
 
@@ -100,7 +101,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
     def _get_dataframe(self):
         session = workoutbuddy.create_session()
-        query = session.query(Log.date, Log.reps, Exercise.name)
+        query = session.query(Log, Exercise).join(Exercise)
         df = pd.read_sql(query.statement, session.bind)
         return df
 
@@ -112,25 +113,20 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         date_start = self.date_start.date().toPython()
         date_end = self.date_end.date().toPython()
 
-        dataframe = self.dataframe.copy()
-        dataframe = dataframe[dataframe["date"] < date_end]
-        dataframe = dataframe[dataframe["date"] > date_start]
+        df = self.dataframe.copy()
+        df = df[df["date"] < date_end]
+        df = df[df["date"] > date_start]
 
-        # filter names
-        by_name = dataframe.groupby("name")
+        # area plot
+        ax = self.canvas.figure.add_subplot()
         names = self.list_exercises.model().get_checked_items()
+        if names:
+            pivot_df = df.pivot(index="date", columns="name", values="reps")
+            if not pivot_df.empty:
+                pivot_df.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
 
-        ax = self.canvas.figure.add_subplot(111)
-        for name in names:
-            try:
-                df = by_name.get_group(name)
-            except KeyError:
-                continue
-            df.plot(x="date", ax=ax, alpha=.5)
-
-        # force axis limit
         ax.set_xlim(date_start, date_end)
-        ax.legend(by_name.groups)
+        ax.grid()
         self.canvas.draw()
 
     # =========================================================================
