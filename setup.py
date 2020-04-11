@@ -19,7 +19,7 @@ requirements_dev = ["flake8==3.7.*", "radon==4.1.*"]
 
 setup(name="workoutbuddy",
       version=__version__,
-      description="Workout schedule manager/plotter.",
+      description="Workout database and plotting tool.",
       license="MIT",
       author="C&eacute;dric Duriau",
       author_email="duriau.cedric@live.be",
