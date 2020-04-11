@@ -9,7 +9,7 @@ from workoutbuddy import workoutbuddy
 
 def _build_parser():
     """
-    Builds the command line interface.
+    Build the command line interface.
 
     :rtype: ArgumentParser
     """
