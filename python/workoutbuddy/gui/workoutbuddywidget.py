@@ -15,6 +15,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import pandas as pd
+from matplotlib.lines import Line2D
 
 
 class WorkoutBuddyWidget(QtWidgets.QWidget):
@@ -57,9 +58,14 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         # settings
         self.cb_grid = QtWidgets.QCheckBox()
 
+        self.combo_marker = QtWidgets.QComboBox()
+        markers = [i for i in Line2D.markers.keys() if isinstance(i, str) and i]
+        self.combo_marker.addItems(markers)
+
         group_settings = QtWidgets.QGroupBox("Settings:")
         group_settings_layout = QtWidgets.QFormLayout()
         group_settings_layout.addRow("Grid:", self.cb_grid)
+        group_settings_layout.addRow("Marker:", self.combo_marker)
         group_settings.setLayout(group_settings_layout)
 
         # canvas
@@ -104,6 +110,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.date_end.dateChanged.connect(self._slot_refresh)
         self.list_exercises.model().item_checked.connect(self._slot_refresh)
         self.cb_grid.stateChanged.connect(self._slot_refresh)
+        self.combo_marker.currentTextChanged.connect(self._slot_refresh)
         self.dataframe_changed.connect(self._plot)
 
     def _initialize(self):
@@ -163,7 +170,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         df = df[df["date"] > date_start]
 
         # build area dataframe
-        ax = self.canvas.figure.add_subplot()
+        axis = self.canvas.figure.add_subplot()
         names = self.list_exercises.model().get_checked_items()
 
         dataframe = pd.DataFrame()
@@ -172,12 +179,16 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
         # plot area
         if not dataframe.empty:
-            dataframe.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
+            dataframe.loc[:, names].plot.area(stacked=True, ax=axis, alpha=0.75)
 
         # set axis settings
-        ax.set_xlim(date_start, date_end)
+        axis.set_xlim(date_start, date_end)
         if self.cb_grid.isChecked():
-            ax.grid()
+            axis.grid()
+
+        marker = self.combo_marker.currentText()
+        for line in axis.lines:
+            line.set_marker(marker)
 
         # auto-rotate x axis date ticks
         self.canvas.figure.autofmt_xdate()
