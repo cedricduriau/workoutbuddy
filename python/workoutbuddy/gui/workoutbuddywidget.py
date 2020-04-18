@@ -130,6 +130,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.dataframe = self._get_dataframe()
 
     def _slot_refresh(self, *args, **kwargs):
+        """Slot forcing the refresh. Ignores any passed argument."""
         self.refresh()
 
     def _get_dataframe(self):
