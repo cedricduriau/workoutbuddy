@@ -30,6 +30,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self._build_ui()
         self._initialize()
         self._connect_signals()
+        self.refresh()
 
     # =========================================================================
     # private
@@ -44,6 +45,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.date_end.setDisplayFormat("dd/MM/yyyy")
 
         self.list_exercises = QtWidgets.QListView()
+        self.list_exercises.setModel(CheckableStringListModel())
 
         group_filters = QtWidgets.QGroupBox("Filters:")
         group_filters_layout = QtWidgets.QFormLayout()
@@ -121,7 +123,10 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         session = workoutbuddy.create_session()
         result = session.query(Exercise.name).all()
         exercices = [i[0] for i in result]
-        self.list_exercises.setModel(CheckableStringListModel(exercices))
+        model = CheckableStringListModel(exercices)
+        for exercice in exercices:
+            model.set_item_checked(exercice, True)
+        self.list_exercises.setModel(model)
 
         # grid
         self.cb_grid.setChecked(True)
