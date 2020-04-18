@@ -62,11 +62,21 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         win.addToolBar(NavigationToolbar(self.canvas, win))
         win.setCentralWidget(self.canvas)
 
+        group_graph = QtWidgets.QGroupBox("Graph:")
+        group_graph_layout = QtWidgets.QVBoxLayout()
+        group_graph_layout.addWidget(win)
+        group_graph.setLayout(group_graph_layout)
+
         # main layout
-        layout = QtWidgets.QHBoxLayout()
-        layout.addWidget(group_settings)
-        layout.addWidget(win)
-        layout.setStretch(1, 1)
+        splitter = QtWidgets.QSplitter()
+        splitter.addWidget(group_settings)
+        splitter.addWidget(group_graph)
+        splitter.setStretchFactor(0, 0)
+        splitter.setStretchFactor(1, 1)
+        splitter.setHandleWidth(8)
+
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(splitter)
         self.setLayout(layout)
 
         # window settings
