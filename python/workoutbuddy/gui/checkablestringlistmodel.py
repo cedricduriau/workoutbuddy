@@ -99,18 +99,35 @@ class CheckableStringListModel(QtCore.QStringListModel):
         items = self._checked_items.copy()
         return items
 
-    def set_checked_items(self, items, checked=True):
+    def find_item_index(self, item):
         """
-        Set the checkstate of indexes.
+        Return the index of an item.
 
-        :param items: Displayed data of model indexes to check.
-        :type items: list[str]
+        :param item: Displayed item.
+        :type item: str
 
-        :param checked: Whether to check or uncheck the matching indexes.
-        :type checked: bool
+        :rtype: QtCore.QModelIndex
         """
         for i in range(self.rowCount()):
             index = self.index(i, 0)
             value = index.data(role=QtCore.Qt.DisplayRole)
-            checkstate = QtCore.Qt.Checked if value in items else QtCore.Qt.Unchecked
-            self.setData(index, checkstate, QtCore.Qt.CheckStateRole)
+            if value == item:
+                return index
+        return QtCore.QModelIndex()
+
+    def set_item_checked(self, item, checked):
+        """
+        Set the checkstate of an item.
+
+        :param item: Displayed item.
+        :type item: str
+
+        :param checked: True to check, False to uncheck.
+        :type checked: bool
+        """
+        index = self.find_item_index(item)
+        if index.isValid():
+            checkstate = QtCore.Qt.Checked if checked else QtCore.Qt.Unchecked
+            result = self.setData(index, checkstate, QtCore.Qt.CheckStateRole)
+            return result
+        return False
