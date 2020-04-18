@@ -36,23 +36,28 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
     # =========================================================================
     def _build_ui(self):
         """Build the user interface."""
-        # date start
+        # filters
         self.date_start = QtWidgets.QDateEdit()
         self.date_start.setDisplayFormat("dd/MM/yyyy")
 
-        # date end
         self.date_end = QtWidgets.QDateEdit()
         self.date_end.setDisplayFormat("dd/MM/yyyy")
 
-        # exercises
         self.list_exercises = QtWidgets.QListView()
 
+        group_filters = QtWidgets.QGroupBox("Filters:")
+        group_filters_layout = QtWidgets.QFormLayout()
+        group_filters_layout.addRow("Date Start:", self.date_start)
+        group_filters_layout.addRow("Date End:", self.date_end)
+        group_filters_layout.addRow("Exercises:", self.list_exercises)
+        group_filters.setLayout(group_filters_layout)
+
         # settings
+        self.cb_grid = QtWidgets.QCheckBox()
+
         group_settings = QtWidgets.QGroupBox("Settings:")
         group_settings_layout = QtWidgets.QFormLayout()
-        group_settings_layout.addRow("Date Start:", self.date_start)
-        group_settings_layout.addRow("Date End:", self.date_end)
-        group_settings_layout.addRow("Exercises:", self.list_exercises)
+        group_settings_layout.addRow("Grid:", self.cb_grid)
         group_settings.setLayout(group_settings_layout)
 
         # canvas
@@ -68,8 +73,16 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         group_graph.setLayout(group_graph_layout)
 
         # main layout
+        left_pane = QtWidgets.QWidget()
+        left_pane_layout = QtWidgets.QVBoxLayout()
+        left_pane_layout.addWidget(group_filters)
+        left_pane_layout.addWidget(group_settings)
+        left_pane_layout.setContentsMargins(0, 0, 0, 0)
+        left_pane_layout.addStretch(0)
+        left_pane.setLayout(left_pane_layout)
+
         splitter = QtWidgets.QSplitter()
-        splitter.addWidget(group_settings)
+        splitter.addWidget(left_pane)
         splitter.addWidget(group_graph)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
@@ -85,39 +98,39 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
     def _connect_signals(self):
         """Connect signals with slots."""
-        self.date_start.dateChanged.connect(self._date_start_changed)
-        self.date_end.dateChanged.connect(self._date_end_changed)
-        self.list_exercises.model().item_checked.connect(self._list_exercises_item_checked)
+        self.date_start.dateChanged.connect(self._slot_refresh)
+        self.date_end.dateChanged.connect(self._slot_refresh)
+        self.list_exercises.model().item_checked.connect(self._slot_refresh)
+        self.cb_grid.stateChanged.connect(self._slot_refresh)
         self.dataframe_changed.connect(self._plot)
 
     def _initialize(self):
         """Initialize startup data."""
         today = datetime.date.today()
 
+        # date start
         date_start = datetime.date(today.year, today.month, 1)
         self.date_start.setDate(date_start)
 
+        # date end
         days = calendar.monthrange(today.year, today.month)[1]
         date_end = datetime.date(today.year, today.month, days)
         self.date_end.setDate(date_end)
 
+        # exercises
         session = workoutbuddy.create_session()
         result = session.query(Exercise.name).all()
         exercices = [i[0] for i in result]
         self.list_exercises.setModel(CheckableStringListModel(exercices))
 
+        # grid
+        self.cb_grid.setChecked(True)
+
+        # dataframe
         self.dataframe = self._get_dataframe()
 
-    def _date_start_changed(self, *args, **kwargs):
-        """Slot for date start changes."""
-        self.refresh()
-
-    def _date_end_changed(self, *args, **kwargs):
-        """Slot for date end changes."""
-        self.refresh()
-
-    def _list_exercises_item_checked(self, *args, **kwargs):
-        """Slot for exercise list item checkstate changes."""
+    def _slot_refresh(self, *args, **kwargs):
+        """Slot forcing the refresh. Ignores any passed argument."""
         self.refresh()
 
     def _get_dataframe(self):
@@ -156,8 +169,10 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         if not dataframe.empty:
             dataframe.loc[:, names].plot.area(stacked=True, ax=ax, alpha=0.75)
 
-        # set axis date range
+        # set axis settings
         ax.set_xlim(date_start, date_end)
+        if self.cb_grid.isChecked():
+            ax.grid()
 
         # auto-rotate x axis date ticks
         self.canvas.figure.autofmt_xdate()
