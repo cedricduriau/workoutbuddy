@@ -122,7 +122,7 @@ def create_exercise(name):
 
     exercise = session.query(Exercise).filter(Exercise.name == name).first()
     if exercise:
-        print(f"exercise already exists (id: {exercise.id})")
+        print("exercise already exists (id: {})".format(exercise.id))
         return
 
     exercise = Exercise(name=name)
@@ -155,7 +155,7 @@ def log_exercise(date, exerciseid, reps):
     session = create_session()
     exercise = session.query(Exercise).filter(Exercise.id == exerciseid).first()
     if not exercise:
-        print(f"no exercise found for id: {exercise.id}")
+        print("no exercise found for id: {}".format(exercise.id))
         return
 
     log = Log(date=date, exercise=exercise, reps=reps)
