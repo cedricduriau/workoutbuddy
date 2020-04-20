@@ -101,7 +101,7 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
         self.setLayout(layout)
 
         # window settings
-        self.setWindowTitle(f"WorkoutBuddy - v{__version__}")
+        self.setWindowTitle("WorkoutBuddy - v{}".format(__version__))
         self.setWindowFlags(QtCore.Qt.Window)
 
     def _connect_signals(self):

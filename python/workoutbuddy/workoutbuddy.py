@@ -26,7 +26,7 @@ def _create_engine():
 
     :rtype: sqlalchemy.engine.Engine
     """
-    engine_url = f"sqlite:///{DB_PATH}"
+    engine_url = "sqlite:///{}".format(DB_PATH)
     engine = create_engine(engine_url)
     return engine
 
