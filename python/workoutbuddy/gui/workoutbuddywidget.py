@@ -179,7 +179,10 @@ class WorkoutBuddyWidget(QtWidgets.QWidget):
 
         # plot area
         if not dataframe.empty:
-            dataframe.loc[:, names].plot.area(stacked=True, ax=axis, alpha=0.75)
+            selection = [c for c in names if c in dataframe.columns]
+            df = dataframe.loc[:, selection]
+            if not df.empty:
+                df.plot.area(stacked=True, ax=axis, alpha=0.75)
 
         # set axis settings
         axis.set_xlim(date_start, date_end)
